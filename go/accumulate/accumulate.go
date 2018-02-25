@@ -1,8 +1,9 @@
 package accumulate
 
-func Accumulate(input []string, f func(string) string) (output []string) {
-	for _, v := range input {
-		output = append(output, f(v))
+func Accumulate(input []string, f func(string) string) []string {
+	output := make([]string, len(input))
+	for i, v := range input {
+		output[i] = f(v)
 	}
-	return
+	return output
 }
