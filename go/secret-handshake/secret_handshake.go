@@ -7,30 +7,29 @@ var action = map[uint]string{
 	8: "jump",
 }
 
-var actions = []uint{8, 4, 2, 1}
+func reverse(l []string) []string {
+	var out = make([]string, len(l))
+
+	for i := 0; i < len(l); i++ {
+		out[i] = l[len(l)-1-i]
+	}
+
+	return out
+}
 
 func Handshake(code uint) []string {
-	var left2right bool
-	var output = make([]string, 1)
+	var output = make([]string, 0)
+	var bitmask uint = 8
 
-	if code >= 16 {
-		left2right = true
-		code -= 16
+	for bitmask > 0 {
+		if code&bitmask > 0 {
+			output = append(output, action[bitmask])
+		}
+		bitmask = bitmask >> 1
 	}
 
-	for _, a := range actions {
-		if code >= a {
-			output = append(output, action[a])
-			code -= a
-		}
-	}
-
-	output = output[1:]
-
-	if !left2right {
-		for i := 0; i < len(output)/2; i++ {
-			output[i], output[len(output)-1-i] = output[len(output)-1-i], output[i]
-		}
+	if code < 16 {
+		output = reverse(output)
 	}
 
 	return output
