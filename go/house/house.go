@@ -1,7 +1,5 @@
 package house
 
-import "bytes"
-
 var phrase = []string{
 	"house that Jack built",
 	"malt",
@@ -31,31 +29,26 @@ var verb = []string{
 	"belonged to",
 }
 
-func Verse(n int) string {
-	var buffer bytes.Buffer
-
-	for i := n - 1; i >= 0; i-- {
-		if i == n-1 {
-			buffer.WriteString("This is the " + phrase[i])
-		} else {
-			buffer.WriteString("\nthat " + verb[i] + " the " + phrase[i])
-		}
+func verseHelper(n, i int) string {
+	if i == 1 {
+		return "This is the " + phrase[n-i]
 	}
 
-	buffer.WriteString(".")
+	return verseHelper(n, i-1) + "\nthat " + verb[n-i] + " the " + phrase[n-i]
+}
 
-	return buffer.String()
+func Verse(n int) string {
+	return verseHelper(n, n) + "."
+}
+
+func songHelper(i int) string {
+	if i == 1 {
+		return Verse(i)
+	}
+
+	return songHelper(i-1) + "\n\n" + Verse(i)
 }
 
 func Song() string {
-	var buffer bytes.Buffer
-
-	for i := 1; i <= 12; i++ {
-		if i > 1 {
-			buffer.WriteString("\n\n")
-		}
-		buffer.WriteString(Verse(i))
-	}
-
-	return buffer.String()
+	return songHelper(12)
 }
